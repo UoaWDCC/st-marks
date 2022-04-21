@@ -1,0 +1,22 @@
+{
+  "name": "st-marks-graveyard",
+  "private": true,
+  "engines": {
+    "node": "16.x"
+  },
+  "version": "1.0.0",
+  "description": "Web app to access a digitised version of the St. Marks graveyard developed by seven students from the University of Auckland in 2021",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.1.2",
+    "prettier": "2.3.2"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "(backend|frontend)/src/**/*.{ts,tsx,js,jsx}": "eslint --fix --cache --max-warnings=0",
+    "*": "prettier --ignore-unknown --write"
+  }
+}

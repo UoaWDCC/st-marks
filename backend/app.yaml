@@ -1,0 +1,11 @@
+runtime: nodejs16
+
+service: backend
+
+entrypoint: node build/src/index.js
+
+env_variables:
+  PORT: 8080
+
+includes:
+  - env.yaml

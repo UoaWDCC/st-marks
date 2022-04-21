@@ -1,0 +1,45 @@
+name: Backend CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths: "backend/**"
+  push:
+    branches: [main]
+
+defaults:
+  run:
+    working-directory: backend/
+
+jobs:
+  backend-ci:
+    name: Run Backend Tests and Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run prettier
+        run: npm run format
+
+      - name: Run tests
+        run: npm test
+        env:
+          AUTH0_ISSUER_DOMAIN: dev.au.auth0.com
+          MAILJET_SENDER_EMAIL: no-reply@org.com
+          MAILJET_RECEIVER: received@org.com
+
+      - name: Run build
+        run: npm run build --if-present
