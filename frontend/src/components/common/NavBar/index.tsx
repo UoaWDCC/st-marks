@@ -46,12 +46,12 @@ const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
         </IconButton>
       </Tooltip>
       <Switch
-          checked={darkMode}
-          onChange={() => setMode(!darkMode)}
-          name="darkMode"
-          color="primary"
-          className={styles.clickable}
-        />
+        checked={darkMode}
+        onChange={() => setMode(!darkMode)}
+        name="darkMode"
+        color="primary"
+        className={styles.clickable}
+      />
     </Box>
   );
 };
