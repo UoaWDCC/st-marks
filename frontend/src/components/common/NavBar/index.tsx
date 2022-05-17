@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
-import Switch from '@mui/material/Switch';
+import Switch from "@mui/material/Switch";
 
 interface NavBarProps {
   contrast?: boolean;
