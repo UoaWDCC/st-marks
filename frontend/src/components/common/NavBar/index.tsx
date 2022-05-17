@@ -4,7 +4,6 @@ import { useTheme } from "@mui/material/styles";
 import {
   Home as HomeIcon,
   MenuBook as MenuBookIcon,
-  Room as RoomIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
