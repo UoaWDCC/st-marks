@@ -8,6 +8,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import Switch from '@mui/material/Switch';
 
 interface NavBarProps {
   contrast?: boolean;
@@ -15,6 +16,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
   const theme = useTheme();
+  const [darkMode, setMode] = React.useState(true);
   const color = contrast
     ? theme.palette.primary.contrastText
     : theme.palette.primary.main;
@@ -43,17 +45,13 @@ const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
           <HomeIcon htmlColor={color} fontSize="large" />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Map" placement="left">
-        <IconButton
-          component={Link}
-          to="/map"
-          data-testid="map-button"
+      <Switch
+          checked={darkMode}
+          onChange={() => setMode(!darkMode)}
+          name="darkMode"
+          color="primary"
           className={styles.clickable}
-          size="large"
-        >
-          <RoomIcon htmlColor={color} fontSize="large" />
-        </IconButton>
-      </Tooltip>
+        />
     </Box>
   );
 };
