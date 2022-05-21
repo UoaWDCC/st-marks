@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IPlot } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
@@ -21,6 +22,9 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   const [map, setMap] = useState<google.maps.Map>();
 
   // Memorise map instance
+  // initialise mapId
+  let mapId: string = Math.random()*100%2 == 0  ? "c1b071c4df766122" : "22722d672fb630c2";
+  mapId = "22722d672fb630c2";
   useEffect(() => {
     if (mapRef.current) {
       setMap(
@@ -38,13 +42,20 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
           },
           disableDefaultUI: true,
           zoomControl: false,
-          mapId: "c1b071c4df766122",
+          mapId: mapId, // This is the API key
         })
       );
     }
   }, [mapRef]);
 
+  // Memorise map instance
+  // dark mapId: "22722d672fb630c2"
+  //let mapId = "c1b071c4df766122";
+  //if (global.darkMode) {
+  //mapId = "22722d672fb630c2";
+  //}
   // Initialise overlay
+  
   useEffect(() => {
     if (map) {
       new google.maps.GroundOverlay(
