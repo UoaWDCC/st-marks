@@ -14,6 +14,5 @@ export const filterPeopleByDeathDate = (
   filterDate: IDate
 ): IPerson[] =>
   people.filter((person) =>
-    // eslint-disable-next-line
-    (filterDate.year === undefined || filterDate.year === person.dateOfDeath!.year) && (filterDate.month === undefined || filterDate.month === person.dateOfDeath!.month) && (filterDate.day === undefined || filterDate.day === person.dateOfDeath!.day)
+    (filterDate.year === undefined || (person.dateOfDeath && filterDate.year === person.dateOfDeath.year)) && (filterDate.month === undefined || person.dateOfDeath && (filterDate.month === person.dateOfDeath.month)) && (filterDate.day === undefined || person.dateOfDeath && (filterDate.day === person.dateOfDeath.day))
   );
