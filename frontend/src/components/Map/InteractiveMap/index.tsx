@@ -1,4 +1,5 @@
-import { randomInt } from "crypto";
+// import { randomInt } from "crypto";
+// import { useCookies } from "react-cookie";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IPlot } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
@@ -20,11 +21,13 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
 }: InteractiveMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
-
-  // Memorise map instance
-  // initialise mapId
-  let mapId: string = Math.random()*100%2 == 0  ? "c1b071c4df766122" : "22722d672fb630c2";
-  mapId = "22722d672fb630c2";
+  // const [cookies, setCookie] = useCookies(["user"]);
+  
+  // // Memorise map instance
+  // // initialise mapId
+  // const mapId: string = cookie.darkMode == 'true'  ? "c1b071c4df766122" : "22722d672fb630c2";
+  const mapId = "22722d672fb630c2";
+  
   useEffect(() => {
     if (mapRef.current) {
       setMap(
