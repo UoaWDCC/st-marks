@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, Switch } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import {
   Home as HomeIcon,
@@ -8,6 +8,10 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import { useCookies } from "react-cookie";
+
+
+
 
 interface NavBarProps {
   contrast?: boolean;
@@ -18,6 +22,20 @@ const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
   const color = contrast
     ? theme.palette.primary.contrastText
     : theme.palette.primary.main;
+
+  const [cookies, setCookie] = useCookies(["darkMode"]);
+  const [mode, setMode] = React.useState(false);
+
+  function darkModeOn() {
+    setCookie("darkMode", "true", {
+      path: "/"
+    });
+  }
+  function darkModeOff() {
+    setCookie("darkMode", "false", {
+      path: "/"
+    });
+  }
 
   return (
     <Box className={styles.topBarIcons}>
@@ -44,15 +62,19 @@ const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
         </IconButton>
       </Tooltip>
       <Tooltip title="Map" placement="left">
-        <IconButton
-          component={Link}
-          to="/map"
-          data-testid="map-button"
+        <Switch
+          checked={mode}
+          onChange={() => {
+            if (mode) {
+              darkModeOn();
+            } else {
+              darkModeOff();
+            }
+            setMode(!mode);
+          }
+          }
           className={styles.clickable}
-          size="large"
-        >
-          <RoomIcon htmlColor={color} fontSize="large" />
-        </IconButton>
+        />
       </Tooltip>
     </Box>
   );
