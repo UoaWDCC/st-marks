@@ -124,8 +124,10 @@ const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
             darkModeOff();
           }
           setMode(!mode);
+          window.location.reload();
         }
         }/>}
+        
         className={styles.clickable}
         label="Dark Mode"
         labelPlacement="start"
