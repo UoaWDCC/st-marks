@@ -8,7 +8,7 @@ import SearchBar from "../../components/Directory/SearchBar";
 import useGet from "../../hooks/useGet";
 import { IPerson, IDate } from "../../types/schema";
 import styles from "./DirectoryPage.module.css";
-import { filterPeopleByFullName, filterPeopleByDeathDate } from "../../utils/filter";
+import { filterPeopleByFullName, filterPeopleByDeathDate, filterPeopleBetweenTwoDeathDates } from "../../utils/filter";
 import { sortPeopleByFullName } from "../../utils/sort";
 import Error from "../../components/common/Error";
 import { ServerError } from "../../components/common/Error/ErrorUtils";
@@ -19,6 +19,8 @@ const DirectoryPage: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [deathDate, setDeathDate] = useState<IDate>({});
+  const [filterStartDate, setFilterStartDate] = useState<Date | undefined>();
+  const [filterEndDate, setFilterEndDate] = useState<Date | undefined>();
   const { data: people, status, isLoading } = useGet<IPerson[]>("/api/person");
   const history = useHistory();
 
@@ -45,7 +47,7 @@ const DirectoryPage: React.FC = () => {
               direction="row"
               className={styles.grid}
             >
-              {filterPeopleByDeathDate(filterPeopleByFullName(people, searchTerm), deathDate).map(
+              {filterPeopleBetweenTwoDeathDates(filterPeopleByDeathDate(filterPeopleByFullName(people, searchTerm), deathDate), filterStartDate, filterEndDate).map(
                 (person: IPerson) => {
                   return (
                     <Grid item key={person._id}>
