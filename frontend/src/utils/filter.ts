@@ -17,6 +17,7 @@ export const filterPeopleByDeathDate = (
     (filterDate.year === undefined || (person.dateOfDeath && filterDate.year === person.dateOfDeath.year)) && (filterDate.month === undefined || person.dateOfDeath && (filterDate.month === person.dateOfDeath.month)) && (filterDate.day === undefined || person.dateOfDeath && (filterDate.day === person.dateOfDeath.day))
   );
 
+// ignores year for comparison
 export const filterPeopleBetweenTwoDeathDates = (
   people: IPerson[],
   filterStartDate: Date | undefined,
