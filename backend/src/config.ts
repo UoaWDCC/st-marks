@@ -16,8 +16,7 @@ const config = convict({
   },
   mongo_uri: {
     format: "String",
-    default:
-      "mongodb+srv://team2022:team2022@cluster0.mww71.mongodb.net/stmarksgraveyard?retryWrites=true&w=majority",
+    default: "mongodb://localhost:27017/st-marks-graveyard",
     env: "MONGO_URI",
   },
   google_application_credentials: {
@@ -37,22 +36,22 @@ const config = convict({
   },
   mailjet_public_key: {
     format: "String",
-    default: "88908c27b713f6438dd955f9a1e53464",
+    default: "",
     env: "MAILJET_PUBLIC_KEY",
   },
   mailjet_secret_key: {
     format: "String",
-    default: "012b6cd93d92c6a1b0a498e987449d6a",
+    default: "",
     env: "MAILJET_SECRET_KEY",
   },
   mailjet_sender_email: {
     format: "email",
-    default: "mlim680@aucklanduni.ac.nz",
+    default: "",
     env: "MAILJET_SENDER_EMAIL",
   },
   mailjet_receiver: {
     format: "email",
-    default: "mlim680@aucklanduni.ac.nz",
+    default: "",
     env: "MAILJET_RECEIVER",
   },
   mailjet_email_template: {
@@ -62,14 +61,12 @@ const config = convict({
   },
   auth0_audience: {
     format: "String",
-    default:
-      "https://manage.auth0.com/dashboard/au/st-marks-graveyard/applications",
+    default: "",
     env: "AUTH0_AUDIENCE",
   },
   auth0_issuer_domain: {
     format: "String",
-    default:
-      "https://manage.auth0.com/dashboard/au/st-marks-graveyard/applications",
+    default: "",
     env: "AUTH0_ISSUER_DOMAIN",
   },
 });
