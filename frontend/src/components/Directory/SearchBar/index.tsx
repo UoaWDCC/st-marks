@@ -6,16 +6,9 @@ import styles from "./SearchBar.module.css";
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import Dialog from '@mui/material/Dialog';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { IDate } from "../../../types/schema";
-
-import { getDate, getMonth, getYear } from 'date-fns'
-
 import IconButton from '@mui/material/IconButton';
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import Popover from '@mui/material/Popover';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -25,7 +18,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 interface SearchBarProps {
   onSearchTermChange: (newValue: string) => void;
-  onDeathDateChange: (newDate: IDate) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
@@ -45,25 +37,14 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   const dateTheme = createTheme({
     palette: {
-      // mode: "dark"
-      // background: {
-      //   paper: '#e3f2fd'
-      // },
-    },
+      mode: "light",
+    }
   });
 
-  const { onSearchTermChange, onDeathDateChange } = props;
+  const { onSearchTermChange } = props;
 
   const [date, setDate] = React.useState<Date | null>(null);
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   console.log(date);
 
@@ -101,39 +82,14 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                     <ThemeProvider theme={dateTheme}>
                       <DatePicker
                         className="date-picker"
-                        // views={['year', 'month', 'day']}
+                        views={['year', 'month', 'day']}
                         openTo="year"
-                        minDate={new Date(1800, 0, 1)}
+                        minDate={new Date(1800, 0)}
                         value={date}
                         onChange={(newDateValue: Date | null) => {
                           setDate(newDateValue)
-                          newDateValue ?
-                            onDeathDateChange({
-                              year: getYear(newDateValue),
-                              month: getMonth(newDateValue) + 1,
-                              day: getDate(newDateValue)
-                            }) : onDeathDateChange({})
                         }}
-                        renderInput={(params) => {
-                          console.log(params.inputProps)
-                          return <TextField
-                            {...params}
-                            InputProps={{
-                              ...params.InputProps,
-                              endAdornment: (
-                                <>
-                                  <InputAdornment position="end">
-                                    <IconButton onClick={() => { setDate(null); onDeathDateChange({}); }}>
-                                      <AutorenewRoundedIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                  {params.InputProps?.endAdornment}
-                                </>
-                              )
-                            }}
-                          />
-                        }
-                        }
+                        renderInput={(params) => <TextField {...params} />}
                       />
                     </ThemeProvider>
                   </LocalizationProvider>
@@ -142,32 +98,11 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             </InputAdornment>
           }
         />
+        <InputBase />
         <Tooltip title="Search">
-          <SearchIcon onClick={handleClickOpen} />
+          <SearchIcon />
         </Tooltip>
       </div>
-      <Dialog open={open} onClose={handleClose}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <ThemeProvider theme={dateTheme}>
-            <StaticDatePicker
-              className="date-picker"
-              views={['year', 'month', 'day']}
-              openTo="year"
-              value={date}
-              onChange={(newDateValue: Date | null) => {
-                setDate(newDateValue)
-                newDateValue ?
-                  onDeathDateChange({
-                    year: getYear(newDateValue),
-                    month: getMonth(newDateValue) + 1,
-                    day: getDate(newDateValue)
-                  }) : onDeathDateChange({})
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </ThemeProvider>
-        </LocalizationProvider>
-      </Dialog>
     </Paper >
   );
 };
