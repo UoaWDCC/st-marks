@@ -15,6 +15,7 @@ import { IDate } from "../../../types/schema";
 import { getDate, getMonth, getYear } from 'date-fns'
 
 import IconButton from '@mui/material/IconButton';
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import Popover from '@mui/material/Popover';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -100,9 +101,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                     <ThemeProvider theme={dateTheme}>
                       <DatePicker
                         className="date-picker"
-                        views={['year', 'month', 'day']}
+                        // views={['year', 'month', 'day']}
                         openTo="year"
-                        minDate={new Date(1800, 0)}
+                        minDate={new Date(1800, 0, 1)}
                         value={date}
                         onChange={(newDateValue: Date | null) => {
                           setDate(newDateValue)
@@ -113,7 +114,26 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                               day: getDate(newDateValue)
                             }) : onDeathDateChange({})
                         }}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => {
+                          console.log(params.inputProps)
+                          return <TextField
+                            {...params}
+                            InputProps={{
+                              ...params.InputProps,
+                              endAdornment: (
+                                <>
+                                  <InputAdornment position="end">
+                                    <IconButton onClick={() => { setDate(null); onDeathDateChange({}); }}>
+                                      <AutorenewRoundedIcon />
+                                    </IconButton>
+                                  </InputAdornment>
+                                  {params.InputProps?.endAdornment}
+                                </>
+                              )
+                            }}
+                          />
+                        }
+                        }
                       />
                     </ThemeProvider>
                   </LocalizationProvider>
@@ -122,7 +142,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             </InputAdornment>
           }
         />
-        <InputBase />
         <Tooltip title="Search">
           <SearchIcon onClick={handleClickOpen} />
         </Tooltip>
