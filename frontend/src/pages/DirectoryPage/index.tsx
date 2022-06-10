@@ -8,7 +8,7 @@ import SearchBar from "../../components/Directory/SearchBar";
 import useGet from "../../hooks/useGet";
 import { IPerson, IDate } from "../../types/schema";
 import styles from "./DirectoryPage.module.css";
-import { filterPeopleByFullName, filterPeopleByDeathDate } from "../../utils/filter";
+import { filterPeopleByFullName, filterPeopleByDeathDate, filterWithinWeek } from "../../utils/filter";
 import { sortPeopleByFullName } from "../../utils/sort";
 import Error from "../../components/common/Error";
 import { ServerError } from "../../components/common/Error/ErrorUtils";
@@ -21,10 +21,15 @@ const DirectoryPage: React.FC = () => {
   const [deathDate, setDeathDate] = useState<IDate>({});
   const { data: people, status, isLoading } = useGet<IPerson[]>("/api/person");
   const history = useHistory();
+  const [anniversaryPeople, setAnniversaryPeople] = useState<IPerson[]>([]);
 
   useEffect(() => {
     if (people) sortPeopleByFullName(people);
   }, [people]);
+
+  useEffect(() => {
+    people && setAnniversaryPeople(filterWithinWeek(people, new Date(2022, 6, 12)))
+  }, [people])
 
   const handleClick = (id: string): void => {
     history.push(`/profile/${id}`);
@@ -52,6 +57,7 @@ const DirectoryPage: React.FC = () => {
                       <ProfileCard
                         person={person}
                         onClick={() => handleClick(person._id)}
+                        isStyled={anniversaryPeople.includes(person)}
                       />
                     </Grid>
                   );
