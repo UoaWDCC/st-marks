@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, InputBase, Tooltip } from "@mui/material";
+import { Paper, InputBase, Tooltip, InputAdornment } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import styles from "./SearchBar.module.css";
 
@@ -11,19 +11,36 @@ import Dialog from '@mui/material/Dialog';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { IDate } from "../../../types/schema";
-import { dateToString } from "../../../utils/dates";
 
 import { getDate, getMonth, getYear } from 'date-fns'
-// import getMonth from 'date-fns/getMonth'
-// import getYear from 'date-fns/getYear'
+
+import IconButton from '@mui/material/IconButton';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import Popover from '@mui/material/Popover';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 
 
 interface SearchBarProps {
   onSearchTermChange: (newValue: string) => void;
+  onDeathDateChange: (newDate: IDate) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  const handleOpenPopOver = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopOver = () => {
+    setAnchorEl(null);
+  };
+
+  const openDatePicker = Boolean(anchorEl);
+  const id = openDatePicker ? 'simple-popover' : undefined;
 
   const dateTheme = createTheme({
     palette: {
@@ -34,9 +51,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     },
   });
 
-  const { onSearchTermChange } = props;
+  const { onSearchTermChange, onDeathDateChange } = props;
 
-  const [date, setDate] = React.useState<IDate | null>(null);
+  const [date, setDate] = React.useState<Date | null>(null);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -47,7 +64,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     setOpen(false);
   };
 
-  date && console.log(date, dateToString(date));
+  console.log(date,);
 
 
   return (
@@ -60,7 +77,56 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             onSearchTermChange(e.target.value);
           }}
           className={styles.searchInput}
+          startAdornment={
+            <InputAdornment position="start">
+
+              <div>
+                <IconButton onClick={handleOpenPopOver} sx={{ p: '10px' }} aria-label="menu">
+                  <DateRangeIcon />
+                </IconButton>
+                <Popover
+                  id={id}
+                  open={openDatePicker}
+                  anchorEl={anchorEl}
+                  onClose={handleClosePopOver}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <ThemeProvider theme={dateTheme}>
+                      <DatePicker
+                        className="date-picker"
+                        views={['day']}
+                        openTo="year"
+                        minDate={new Date(1800, 0, 1)}
+                        value={date}
+                        onChange={(newDateValue: Date | null) => {
+                          setDate(newDateValue)
+                          newDateValue &&
+                            onDeathDateChange({
+                              year: getYear(newDateValue),
+                              month: getMonth(newDateValue) + 1,
+                              day: getDate(newDateValue)
+                            })
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </ThemeProvider>
+                  </LocalizationProvider>
+                </Popover>
+
+
+              </div>
+            </InputAdornment>
+          }
         />
+        <InputBase />
         <Tooltip title="Search">
           <SearchIcon onClick={handleClickOpen} />
         </Tooltip>
@@ -74,12 +140,13 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
               openTo="year"
               value={date}
               onChange={(newDateValue: Date | null) => {
+                setDate(newDateValue)
                 newDateValue &&
-                  setDate({
+                  onDeathDateChange({
                     year: getYear(newDateValue),
                     month: getMonth(newDateValue) + 1,
                     day: getDate(newDateValue)
-                  });
+                  })
               }}
               renderInput={(params) => <TextField {...params} />}
             />
