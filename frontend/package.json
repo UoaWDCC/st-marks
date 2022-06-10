@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.7.0",
+    "@date-io/date-fns": "^2.14.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@googlemaps/react-wrapper": "^1.1.0",
@@ -27,6 +28,7 @@
     "@mui/material": "^5.0.0",
     "@mui/styles": "^5.0.0",
     "@mui/x-data-grid": "^5.0.0-beta.1",
+    "@mui/x-date-pickers": "^5.0.0-alpha.5",
     "axios": "^0.21.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
