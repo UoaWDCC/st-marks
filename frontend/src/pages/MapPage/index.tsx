@@ -17,6 +17,7 @@ import { IPerson, IPlot } from "../../types/schema";
 import useGet from "../../hooks/useGet";
 import useFilterPeople from "./hooks/useFilterPeople";
 import usePageTitle from "../../hooks/usePageTitle";
+import { getAnniversaryWeekPlots } from "../../utils/filter";
 
 const MapPage: React.FC = () => {
   const history = useHistory();
@@ -93,6 +94,14 @@ const MapPage: React.FC = () => {
   const [sortedPeople, setSortedPeople] = useState<IPerson[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
 
+  // get anniversary week plots
+  const [anniversaryWeekPlots, setAnniversaryWeekPlots] = useState<IPlot[]>([]);
+  useEffect(() => {
+    if (people && plots) {
+      setAnniversaryWeekPlots(getAnniversaryWeekPlots(people, plots));
+    }
+  }, [people, plots]);
+
   useEffect(() => {
     if (people) {
       sortPeopleByFullName(people);
@@ -118,6 +127,7 @@ const MapPage: React.FC = () => {
             onClick={plotSelectHandler}
             showLocation={isMobile}
             className={styles.map}
+            anniversaryWeekPlots={anniversaryWeekPlots}
           />
         </Wrapper>
         {!isMobile && (

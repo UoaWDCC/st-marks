@@ -1,4 +1,4 @@
-import { IPerson, IDate } from "../types/schema";
+import { IPerson, IDate, IPlot } from "../types/schema";
 
 export const filterPeopleByFullName = (
   people: IPerson[],
@@ -49,3 +49,37 @@ export const filterPeopleBetweenTwoDeathDates = (
     }
   }
   );
+
+export const getPlotById = (
+  plots: IPlot[],
+  id: string,
+): IPlot | undefined => {
+  let foundPlot: IPlot | undefined = undefined;
+  plots.forEach((plot) => {
+    if (plot._id == id) {
+      foundPlot = plot;
+    }
+  })
+  return foundPlot;
+}
+
+export const getAnniversaryWeekPlots = (
+  people: IPerson[],
+  plots: IPlot[]
+): IPlot[] => {
+  // find anniversary week people
+  const anniversaryWeekPeople = filterPeopleBetweenTwoDeathDates(people, new Date(), new Date(new Date().setDate(new Date().getDate() + 7)));
+
+  // get anniversary week people plots
+  const anniversaryWeekPlots: IPlot[] = [];
+  anniversaryWeekPeople.forEach((person) => {
+    if (person.plot?._id) {
+      const plot = getPlotById(plots, person.plot._id);
+      if (plot) {
+        anniversaryWeekPlots.push(plot);
+      }
+    }
+  })
+
+  return anniversaryWeekPlots;
+}

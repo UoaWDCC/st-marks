@@ -8,6 +8,7 @@ interface InteractiveMapProps {
   onClick: (plotNumber: number) => void;
   showLocation: boolean;
   className: string;
+  anniversaryWeekPlots: IPlot[];
 }
 
 const InteractiveMap: React.FC<InteractiveMapProps> = ({
@@ -16,6 +17,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   onClick,
   showLocation,
   className,
+  anniversaryWeekPlots,
 }: InteractiveMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
@@ -65,22 +67,36 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   // Initialise plots
   useEffect(() => {
     const polygons = plots.reduce((polygonMap, plot) => {
-      const polygon = new google.maps.Polygon({
-        paths: plot.coordinates,
-        strokeColor: "#428bca",
-        strokeOpacity: 0.6,
-        strokeWeight: 2,
-        fillColor: "#428bca",
-        fillOpacity: 0.2,
-      });
-      polygon.setMap(map ?? null);
-      return polygonMap.set(plot.plotNumber, polygon);
+      if (anniversaryWeekPlots.includes(plot)) { // check if its their anniversary week
+        const polygon = new google.maps.Polygon({
+          paths: plot.coordinates,
+          strokeColor: "#AC2306",
+          strokeOpacity: 1,
+          strokeWeight: 2,
+          fillColor: "#ff0000",
+          fillOpacity: 1,
+        });
+        polygon.setMap(map ?? null);
+        return polygonMap.set(plot.plotNumber, polygon);
+      } else {
+        const polygon = new google.maps.Polygon({
+          paths: plot.coordinates,
+          strokeColor: "#428bca",
+          strokeOpacity: 0.6,
+          strokeWeight: 2,
+          fillColor: "#428bca",
+          fillOpacity: 0.2,
+        });
+        polygon.setMap(map ?? null);
+        return polygonMap.set(plot.plotNumber, polygon);
+      }
+
     }, new Map<number, google.maps.Polygon>());
 
     setPolygonsByNumber(polygons);
 
     return () => polygons.forEach((polygon) => polygon.setMap(null));
-  }, [map, plots]);
+  }, [map, plots, anniversaryWeekPlots]);
 
   // Initialise click listeners
   useEffect(() => {
