@@ -64,8 +64,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     setOpen(false);
   };
 
-  console.log(date,);
-
+  console.log(date);
 
   return (
     <Paper className={styles.container}>
@@ -79,7 +78,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           className={styles.searchInput}
           startAdornment={
             <InputAdornment position="start">
-
               <div>
                 <IconButton onClick={handleOpenPopOver} sx={{ p: '10px' }} aria-label="menu">
                   <DateRangeIcon />
@@ -102,26 +100,24 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                     <ThemeProvider theme={dateTheme}>
                       <DatePicker
                         className="date-picker"
-                        views={['day']}
+                        views={['year', 'month', 'day']}
                         openTo="year"
-                        minDate={new Date(1800, 0, 1)}
+                        minDate={new Date(1800, 0)}
                         value={date}
                         onChange={(newDateValue: Date | null) => {
                           setDate(newDateValue)
-                          newDateValue &&
+                          newDateValue ?
                             onDeathDateChange({
                               year: getYear(newDateValue),
                               month: getMonth(newDateValue) + 1,
                               day: getDate(newDateValue)
-                            })
+                            }) : onDeathDateChange({})
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
                     </ThemeProvider>
                   </LocalizationProvider>
                 </Popover>
-
-
               </div>
             </InputAdornment>
           }
@@ -136,17 +132,17 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           <ThemeProvider theme={dateTheme}>
             <StaticDatePicker
               className="date-picker"
-              views={['day']}
+              views={['year', 'month', 'day']}
               openTo="year"
               value={date}
               onChange={(newDateValue: Date | null) => {
                 setDate(newDateValue)
-                newDateValue &&
+                newDateValue ?
                   onDeathDateChange({
                     year: getYear(newDateValue),
                     month: getMonth(newDateValue) + 1,
                     day: getDate(newDateValue)
-                  })
+                  }) : onDeathDateChange({})
               }}
               renderInput={(params) => <TextField {...params} />}
             />
