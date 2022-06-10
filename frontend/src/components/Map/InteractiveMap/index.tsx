@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IPlot } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
+import getAnniversaryPlots from "./utils/getAnniversaryPlots";
 
 interface InteractiveMapProps {
   plots: IPlot[];
@@ -81,6 +82,22 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
     return () => polygons.forEach((polygon) => polygon.setMap(null));
   }, [map, plots]);
+
+  // Highlight anniversary graveyard plots
+  useEffect(() => {
+    const matchedPlots = getAnniversaryPlots(plots);
+    // console.log(matchedPlots)
+    if (matchedPlots) {
+      matchedPlots.forEach(plot => {
+        // console.log(plot)
+        if (plot) {
+          const selectedPolygon = polygonsByNumber?.get(plot.plotNumber);
+          selectedPolygon?.setOptions({ fillColor: '#7A49FF' })
+        }
+      })
+    }
+  }, [plots, polygonsByNumber])
+
 
   // Initialise click listeners
   useEffect(() => {
