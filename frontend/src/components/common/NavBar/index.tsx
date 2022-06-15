@@ -11,6 +11,8 @@ import { useCookies } from "react-cookie";
 import { getCookie } from 'typescript-cookie';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+import Switch from "@mui/material/Switch";
+
 interface NavBarProps {
   contrast?: boolean;
 }
@@ -63,6 +65,7 @@ const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
       borderRadius: 20 / 2,
     },
   }));
+  const [darkMode, setMode] = React.useState(true);
   const color = contrast
     ? theme.palette.primary.contrastText
     : theme.palette.primary.main;
@@ -133,6 +136,13 @@ const NavBar: React.FC<NavBarProps> = ({ contrast = false }: NavBarProps) => {
         labelPlacement="start"
       />
      </Tooltip>
+      <Switch
+        checked={darkMode}
+        onChange={() => setMode(!darkMode)}
+        name="darkMode"
+        color="primary"
+        className={styles.clickable}
+      />
     </Box>
   );
 };
