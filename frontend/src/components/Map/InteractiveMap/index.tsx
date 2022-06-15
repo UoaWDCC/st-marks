@@ -1,6 +1,9 @@
+// import { randomInt } from "crypto";
+// import { useCookies } from "react-cookie";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IPlot } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
+import {getCookie} from 'typescript-cookie';
 
 interface InteractiveMapProps {
   plots: IPlot[];
@@ -20,7 +23,13 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
 
-  // Memorise map instance
+  const darkMode = getCookie('darkMode');
+  // const [cookies, setCookie] = useCookies(["user"]);
+  
+  // // Memorise map instance
+  // // initialise mapId
+  const mapId: string = darkMode == 'true'  ? "c1b071c4df766122" : "22722d672fb630c2";
+  
   useEffect(() => {
     if (mapRef.current) {
       setMap(
@@ -38,13 +47,20 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
           },
           disableDefaultUI: true,
           zoomControl: false,
-          mapId: "c1b071c4df766122",
+          mapId: mapId, // This is the API key
         })
       );
     }
   }, [mapRef]);
 
+  // Memorise map instance
+  // dark mapId: "22722d672fb630c2"
+  //let mapId = "c1b071c4df766122";
+  //if (global.darkMode) {
+  //mapId = "22722d672fb630c2";
+  //}
   // Initialise overlay
+  
   useEffect(() => {
     if (map) {
       new google.maps.GroundOverlay(
