@@ -50,7 +50,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
         })
       );
     }
-  }, [mapRef]);
+  }, [mapRef, mapId]);
 
   // Memorise map instance
   // dark mapId: "22722d672fb630c2"
