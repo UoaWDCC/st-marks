@@ -24,7 +24,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   const [map, setMap] = useState<google.maps.Map>();
 
   const darkMode = getCookie('darkMode');
-  // const [cookies, setCookie] = useCookies(["user"]);
   
   // // Memorise map instance
   // // initialise mapId
