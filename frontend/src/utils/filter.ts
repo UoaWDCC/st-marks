@@ -47,11 +47,11 @@ export const filterPeopleBetweenTwoDeathDates = (
       // otherwise, only person's month is available
       return (person.dateOfDeath.month >= filterStartDate.getMonth() && person.dateOfDeath.month <= filterEndDate.getMonth());
     }
-  }
-  );
+  });
 
 export const filterPeopleDeathDateThisWeek = (
   people: IPerson[]
-): IPerson[] => {
-  return filterPeopleBetweenTwoDeathDates(people, new Date(), new Date(new Date().setDate(new Date().getDate() + 7)));
-}
+): IPerson[] =>
+  // only gets people with specified day and month of death
+  filterPeopleBetweenTwoDeathDates(people, new Date(), new Date(new Date().setDate(new Date().getDate() + 7))).filter((person) => person.dateOfDeath && person.dateOfDeath.day
+  );
