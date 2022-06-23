@@ -49,3 +49,9 @@ export const filterPeopleBetweenTwoDeathDates = (
     }
   }
   );
+
+export const filterPeopleDeathDateThisWeek = (
+  people: IPerson[]
+): IPerson[] => {
+  return filterPeopleBetweenTwoDeathDates(people, new Date(), new Date(new Date().setDate(new Date().getDate() + 7)));
+}
