@@ -6,7 +6,7 @@ import { filterWithinWeek } from "../../../../utils/filter";
 // // Helper function to find the plots with deathdate matching today
 const getAnniversaryPlots = (plots: IPlot[]): IPlot[] => {
 
-	const testDate = new Date(2022, 7, 12);
+	const testDate = new Date(2022, 6, 12);
 
 	const anniversaryPlots = plots.filter(plot => {
 		const people = plot.buried;
