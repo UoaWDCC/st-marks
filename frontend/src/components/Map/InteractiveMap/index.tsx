@@ -30,6 +30,9 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   // // initialise mapId
   const mapId: string =
     darkMode == "true" ? "c1b071c4df766122" : "22722d672fb630c2";
+  
+  const plotColour: string = 
+    darkMode == "true" ? "#428BCA" : "#f0f26b";
 
   useEffect(() => {
     if (mapRef.current) {
@@ -84,12 +87,13 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
     const polygons = plots.reduce((polygonMap, plot) => {
       const polygon = new google.maps.Polygon({
         paths: plot.coordinates,
-        strokeColor: "#428BCA",
+        strokeColor: plotColour,
         strokeOpacity: 0.6,
         strokeWeight: 2,
-        fillColor: "#428BCA",
+        fillColor: plotColour,
         fillOpacity: 0.2,
       });
+
       polygon.setMap(map ?? null);
 
       const infowindow = new google.maps.InfoWindow({
@@ -117,7 +121,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
     setPolygonsByNumber(polygons);
 
     return () => polygons.forEach((polygon) => polygon.setMap(null));
-  }, [map, plots]);
+  }, [map, plots, plotColour]);
 
   // Initialise click listeners
   useEffect(() => {
