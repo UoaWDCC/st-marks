@@ -93,12 +93,12 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
       polygon.setMap(map ?? null);
 
       const infowindow = new google.maps.InfoWindow({
-        content: 
-        "<h2>"+ plot.registeredName + " Plot #" + plot.plotNumber +"</h2>"
-        + "<b>" + "<p>Number of People: " + plot.buried.length + "</p>" + "</b>" +
-        plot.buried.map((person : IPerson) => (
-        "<p></p>" +person.fullName 
-        ))
+        content:
+          "<h2>" + plot.registeredName + " Plot #" + plot.plotNumber + "</h2>"
+          + "<b>" + "<p>Number of People: " + plot.buried.length + "</p>" + "</b>" +
+          plot.buried.map((person: IPerson) => (
+            "<p></p>" + person.fullName
+          ))
       });
 
       const point = averageCoordinates(plot.coordinates);
