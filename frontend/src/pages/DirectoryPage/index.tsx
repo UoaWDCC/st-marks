@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Divider, Grid } from "@mui/material";
 import { useHistory } from "react-router-dom";
-import NavBar from "../../components/common/NavBar";
+import NavBarDirectory from "../../components/common/NavBarDirectory/indexDirectory";
 import Spinner from "../../components/common/Spinner";
 import ProfileCard from "../../components/Directory/ProfileCard";
 import SearchBar from "../../components/Directory/SearchBar";
@@ -31,7 +31,7 @@ const DirectoryPage: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <NavBar />
+      <NavBarDirectory />
       {people && (
         <>
           <SearchBar onSearchTermChange={setSearchTerm} />
