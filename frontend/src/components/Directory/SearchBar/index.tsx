@@ -3,26 +3,24 @@ import { Paper, InputBase, Tooltip, InputAdornment } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import styles from "./SearchBar.module.css";
 
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import TextField from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import Popover from '@mui/material/Popover';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-
-
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import Popover from "@mui/material/Popover";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface SearchBarProps {
   onSearchTermChange: (newValue: string) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
-
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
 
   const handleOpenPopOver = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,18 +31,17 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   };
 
   const openDatePicker = Boolean(anchorEl);
-  const id = openDatePicker ? 'simple-popover' : undefined;
+  const id = openDatePicker ? "simple-popover" : undefined;
 
   const dateTheme = createTheme({
     palette: {
       mode: "light",
-    }
+    },
   });
 
   const { onSearchTermChange } = props;
 
   const [date, setDate] = React.useState<Date | null>(null);
-
 
   console.log(date);
 
@@ -61,7 +58,11 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           startAdornment={
             <InputAdornment position="start">
               <div>
-                <IconButton onClick={handleOpenPopOver} sx={{ p: '10px' }} aria-label="menu">
+                <IconButton
+                  onClick={handleOpenPopOver}
+                  sx={{ p: "10px" }}
+                  aria-label="menu"
+                >
                   <DateRangeIcon />
                 </IconButton>
                 <Popover
@@ -70,24 +71,24 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                   anchorEl={anchorEl}
                   onClose={handleClosePopOver}
                   anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
+                    vertical: "bottom",
+                    horizontal: "left",
                   }}
                   transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: "top",
+                    horizontal: "right",
                   }}
                 >
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <ThemeProvider theme={dateTheme}>
                       <DatePicker
                         className="date-picker"
-                        views={['year', 'month', 'day']}
+                        views={["year", "month", "day"]}
                         openTo="month"
                         minDate={new Date(1800, 0)}
                         value={date}
                         onChange={(newDateValue: Date | null) => {
-                          setDate(newDateValue)
+                          setDate(newDateValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
@@ -103,7 +104,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           <SearchIcon />
         </Tooltip>
       </div>
-    </Paper >
+    </Paper>
   );
 };
 
