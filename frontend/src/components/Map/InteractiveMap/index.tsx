@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IPlot, IPerson } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
 import { getCookie } from "typescript-cookie";
+import { url } from "inspector";
 
 interface InteractiveMapProps {
   plots: IPlot[];
@@ -46,9 +47,15 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
               west: 174.775,
             },
           },
+          // tilt: 0,
           disableDefaultUI: true,
           zoomControl: false,
+          mapTypeControl: true,
+          mapTypeControlOptions: {
+            mapTypeIds: ["roadmap", "satellite"],
+          },
           mapId: mapId,
+
         })
       );
     }
@@ -165,6 +172,89 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
       }),
     []
   );
+
+  const mapTypeControl = (controlDiv: HTMLElement, map: google.maps.Map) => {
+
+    const controlDivStyles = {
+      borderRadius: "8px",
+      border: "2px solid white",
+      boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px",
+      boxSizing: "border-box",
+      height: "79px",
+      opacity: 1,
+      width: "79px",
+      transition: "none 0s ease 0s",
+      marginBottom: "15px",
+    }
+
+    Object.assign(controlDiv.style, controlDivStyles);
+
+    const imageDiv = document.createElement("div");
+    const imageDivStyles = {
+      borderRadius: "6px",
+      inset: "0px",
+      position: "absolute",
+      backgroundImage: `url(${'https://www.google.com/maps/vt/pb=!1m5!1m4!1i15!2i64585!3i39998!4i128!2m2!1e1!3i927!3m9!2sen!3sus!5e1105!12m1!1e4!12m1!1e47!12m1!1e3!4e0!5m2!1e0!5f2!23i10203575!23i1381033!23i1368782!23i1368785!23i47025228!23i4592408!23i1375050!23i4536287'})`,
+      backgroundSize: 'cover',
+
+    }
+    Object.assign(imageDiv.style, imageDivStyles);
+
+    // map type label
+    const label = document.createElement("label");
+    const labelStyles = {
+      borderRadius: "6px",
+      padding: "12px 0px 6px",
+      cursor: "pointer",
+      color: "white",
+      fontSize: "11px",
+      position: "absolute",
+      lineHeight: "normal",
+      bottom: "0px",
+      left: "0px",
+      width: "100%",
+      backgroundImage: "linear-gradient(transparent, rgba(0, 0, 0, 0.6))",
+      height: "15px",
+      textShadow: "rgba(0, 0, 0, 0.7) 0px 1px 8px",
+      textAlign: "center",
+      textIndent: "0px",
+    }
+    label.innerHTML = "Satellite"
+    Object.assign(label.style, labelStyles);
+
+    // button
+    const button = document.createElement("button");
+    const buttonStyles = {
+      background: "transparent",
+      border: "0px",
+      borderRadius: "0px",
+      font: "inherit",
+      margin: "0px",
+      outline: "0px",
+      padding: "0px",
+      color: "inherit",
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      cursor: "pointer",
+    }
+
+    Object.assign(button.style, buttonStyles);
+
+    controlDiv.appendChild(imageDiv);
+    controlDiv.appendChild(label);
+    controlDiv.appendChild(button);
+
+  }
+
+  // create satellite map button
+  useEffect(() => {
+    const controlDiv = document.createElement("div");
+    map && mapTypeControl(controlDiv, map);
+
+    map && map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(controlDiv);
+
+  }, [map])
 
   useEffect(() => {
     if (showLocation) {
