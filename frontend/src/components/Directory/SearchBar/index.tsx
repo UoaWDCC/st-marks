@@ -83,7 +83,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                       <DatePicker
                         className="date-picker"
                         views={['year', 'month', 'day']}
-                        openTo="year"
+                        openTo="month"
                         minDate={new Date(1800, 0)}
                         value={date}
                         onChange={(newDateValue: Date | null) => {
