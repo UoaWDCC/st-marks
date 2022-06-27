@@ -1,6 +1,9 @@
+// import { randomInt } from "crypto";
+// import { useCookies } from "react-cookie";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { IPlot } from "../../../types/schema";
+import { IPlot, IPerson } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
+import { getCookie } from "typescript-cookie";
 
 interface InteractiveMapProps {
   plots: IPlot[];
@@ -20,7 +23,14 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
 
-  // Memorise map instance
+  const darkMode = getCookie("darkMode");
+  // const [cookies, setCookie] = useCookies(["user"]);
+
+  // // Memorise map instance
+  // // initialise mapId
+  const mapId: string =
+    darkMode == "true" ? "c1b071c4df766122" : "22722d672fb630c2";
+
   useEffect(() => {
     if (mapRef.current) {
       setMap(
@@ -38,13 +48,20 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
           },
           disableDefaultUI: true,
           zoomControl: false,
-          mapId: "c1b071c4df766122",
+          mapId: mapId,
         })
       );
     }
-  }, [mapRef]);
+  }, [mapRef, mapId]);
 
+  // Memorise map instance
+  // dark mapId: "22722d672fb630c2"
+  //let mapId = "c1b071c4df766122";
+  //if (global.darkMode) {
+  //mapId = "22722d672fb630c2";
+  //}
   // Initialise overlay
+
   useEffect(() => {
     if (map) {
       new google.maps.GroundOverlay(
@@ -67,13 +84,33 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
     const polygons = plots.reduce((polygonMap, plot) => {
       const polygon = new google.maps.Polygon({
         paths: plot.coordinates,
-        strokeColor: "#428bca",
+        strokeColor: "#428BCA",
         strokeOpacity: 0.6,
         strokeWeight: 2,
-        fillColor: "#428bca",
+        fillColor: "#428BCA",
         fillOpacity: 0.2,
       });
       polygon.setMap(map ?? null);
+
+      const infowindow = new google.maps.InfoWindow({
+        content: 
+        "<h2>"+ plot.registeredName + " Plot #" + plot.plotNumber +"</h2>"
+        + "<b>" + "<p>Number of People: " + plot.buried.length + "</p>" + "</b>" +
+        plot.buried.map((person : IPerson) => (
+        "<p></p>" +person.fullName 
+        ))
+      });
+
+      const point = averageCoordinates(plot.coordinates);
+
+      polygon.addListener("mouseover", () => {
+        infowindow.setPosition(point);
+        infowindow.open(map);
+      });
+      polygon.addListener("mouseout", () => {
+        infowindow.close();
+      });
+
       return polygonMap.set(plot.plotNumber, polygon);
     }, new Map<number, google.maps.Polygon>());
 
