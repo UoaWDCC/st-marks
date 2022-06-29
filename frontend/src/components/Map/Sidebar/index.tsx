@@ -15,7 +15,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import styles from "./Sidebar.module.css";
-import { IPerson, IPlot } from "../../../types/schema";
+import { IDate, IPerson, IPlot } from "../../../types/schema";
 import PersonLink from "../common/PersonLink";
 import SearchResults from "../common/SearchResults";
 
@@ -23,6 +23,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import Popover from '@mui/material/Popover';
+
+import { getDate, getMonth, getYear } from 'date-fns'
 
 
 const useStyles = makeStyles({
@@ -36,6 +38,7 @@ interface SidebarProps {
   selectedPlot: IPlot | undefined;
   searchInput: string;
   onChangeSearchInput: (input: string) => void;
+  onDeathDateChange: (newDate: IDate) => void;
   locationKnown: IPerson[];
   locationUnknown: IPerson[];
   isPeopleLoading: boolean;
@@ -45,6 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   selectedPlot,
   searchInput,
   onChangeSearchInput,
+  onDeathDateChange,
   locationKnown,
   locationUnknown,
   isPeopleLoading,
@@ -150,12 +154,19 @@ const Sidebar: React.FC<SidebarProps> = ({
             <StaticDatePicker
               className="date-picker"
               displayStaticWrapperAs="desktop"
-              openTo="month"
+              openTo="year"
               // views={['month', 'day']}
+              minDate={new Date(1800, 0)}
               value={date}
               onChange={(newDateValue: Date | null) => {
-                setDate(newDateValue);
-              }}
+                setDate(newDateValue)
+                newDateValue ?
+                  onDeathDateChange({
+                    year: getYear(newDateValue),
+                    month: getMonth(newDateValue) + 1,
+                    day: getDate(newDateValue)
+                  }) : onDeathDateChange({})
+              }}                        
               renderInput={(params) => <TextField {...params} />}
               closeOnSelect={true}
             />
