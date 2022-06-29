@@ -19,11 +19,10 @@ import { IPerson, IPlot } from "../../../types/schema";
 import PersonLink from "../common/PersonLink";
 import SearchResults from "../common/SearchResults";
 
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import Popover from '@mui/material/Popover';
-
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import Popover from "@mui/material/Popover";
 
 const useStyles = makeStyles({
   backButton: {
@@ -52,9 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const classes = useStyles();
   const theme = useTheme();
 
-
   const [date, setDate] = React.useState<Date | null>(null);
-
 
   const [anchorEl, setAnchorEl] = React.useState<SVGSVGElement | null>(null);
 
@@ -67,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const id = open ? "simple-popover" : undefined;
 
   date && console.log(date);
 
@@ -138,12 +135,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           anchorEl={anchorEl}
           onClose={handleClosePopOver}
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            vertical: "top",
+            horizontal: "right",
           }}
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
+            vertical: "top",
+            horizontal: "left",
           }}
         >
           <LocalizationProvider dateAdapter={AdapterDateFns}>
