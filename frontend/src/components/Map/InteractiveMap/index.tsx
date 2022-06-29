@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IPlot, IPerson } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
 import { getCookie } from "typescript-cookie";
-import { url } from "inspector";
 
 interface InteractiveMapProps {
   plots: IPlot[];
@@ -47,7 +46,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
               west: 174.775,
             },
           },
-          // tilt: 0,
+          tilt: 0,
           disableDefaultUI: true,
           zoomControl: false,
           mapTypeControl: true,
@@ -55,7 +54,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
             mapTypeIds: ["roadmap", "satellite"],
           },
           mapId: mapId,
-
         })
       );
     }
@@ -177,14 +175,14 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
     const controlDivStyles = {
       borderRadius: "8px",
-      border: "2px solid white",
+      border: "2.5px solid white",
       boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px",
       boxSizing: "border-box",
       height: "79px",
-      opacity: 1,
       width: "79px",
-      transition: "none 0s ease 0s",
-      marginBottom: "15px",
+      marginLeft: "10px",
+      marginBottom: "5px",
+      opacity: 1,
     }
 
     Object.assign(controlDiv.style, controlDivStyles);
@@ -245,6 +243,26 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
     controlDiv.appendChild(label);
     controlDiv.appendChild(button);
 
+    controlDiv.addEventListener("mouseover", () => {
+      imageDiv.style.opacity = "0.9";
+      controlDiv.style.border = "3.5px solid white"
+    })
+
+    controlDiv.addEventListener("mouseout", () => {
+      imageDiv.style.opacity = "1";
+      controlDiv.style.border = "2.5px solid white"
+
+    })
+
+    controlDiv.addEventListener("click", () => {
+      if (map.getMapTypeId() !== "satellite") {
+        // imageDiv.style.backgroundImage = `url(${"./roadmap.png"})`
+        map.setMapTypeId("satellite");
+      } else {
+        map.setMapTypeId("roadmap");
+      }
+    });
+
   }
 
   // create satellite map button
@@ -252,7 +270,8 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
     const controlDiv = document.createElement("div");
     map && mapTypeControl(controlDiv, map);
 
-    map && map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(controlDiv);
+    map && map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(controlDiv);
+    console.log('Google Maps API version: ' + google.maps.version);
 
   }, [map])
 
