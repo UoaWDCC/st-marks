@@ -13,8 +13,12 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import Popover from "@mui/material/Popover";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+import { IDate } from "../../../types/schema";
+import { getDate, getMonth, getYear } from "date-fns";
+
 interface SearchBarProps {
   onSearchTermChange: (newValue: string) => void;
+  onDeathDateChange: (newDate: IDate) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
@@ -39,11 +43,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     },
   });
 
-  const { onSearchTermChange } = props;
+  const { onSearchTermChange, onDeathDateChange } = props;
 
   const [date, setDate] = React.useState<Date | null>(null);
-
-  console.log(date);
 
   return (
     <Paper className={styles.container}>
@@ -84,11 +86,18 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                       <DatePicker
                         className="date-picker"
                         views={["year", "month", "day"]}
-                        openTo="month"
+                        openTo="year"
                         minDate={new Date(1800, 0)}
                         value={date}
                         onChange={(newDateValue: Date | null) => {
                           setDate(newDateValue);
+                          newDateValue
+                            ? onDeathDateChange({
+                                year: getYear(newDateValue),
+                                month: getMonth(newDateValue) + 1,
+                                day: getDate(newDateValue),
+                              })
+                            : onDeathDateChange({});
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />

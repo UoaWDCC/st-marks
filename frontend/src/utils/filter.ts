@@ -13,6 +13,13 @@ export const filterPeopleByDeathDate = (
   people: IPerson[],
   filterDate: IDate
 ): IPerson[] =>
-  people.filter((person) =>
-    (filterDate.year === undefined || (person.dateOfDeath && filterDate.year === person.dateOfDeath.year)) && (filterDate.month === undefined || person.dateOfDeath && (filterDate.month === person.dateOfDeath.month)) && (filterDate.day === undefined || person.dateOfDeath && (filterDate.day === person.dateOfDeath.day))
+  people.filter(
+    (person) =>
+      (filterDate.year === undefined ||
+        (person.dateOfDeath && filterDate.year === person.dateOfDeath.year)) &&
+      (filterDate.month === undefined ||
+        (person.dateOfDeath &&
+          filterDate.month === person.dateOfDeath.month)) &&
+      (filterDate.day === undefined ||
+        (person.dateOfDeath && filterDate.day === person.dateOfDeath.day))
   );
