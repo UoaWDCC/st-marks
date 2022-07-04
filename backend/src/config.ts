@@ -6,7 +6,7 @@ dotenv.config();
 const config = convict({
   port: {
     format: "port",
-    default: 3003,
+    default: 3001,
     env: "PORT",
   },
   origin: {
