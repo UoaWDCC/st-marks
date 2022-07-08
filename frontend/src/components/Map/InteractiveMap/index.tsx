@@ -271,8 +271,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
     map && mapTypeControl(controlDiv, map);
 
     map && map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(controlDiv);
-    console.log('Google Maps API version: ' + google.maps.version);
-
   }, [map])
 
   useEffect(() => {
