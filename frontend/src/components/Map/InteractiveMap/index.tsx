@@ -1,9 +1,10 @@
-// import { randomInt } from "crypto";
-// import { useCookies } from "react-cookie";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IPlot, IPerson } from "../../../types/schema";
 import averageCoordinates from "./utils/averageCoordinates";
+import getAnniversaryPlots from "./utils/getAnniversaryPlots";
 import { getCookie } from "typescript-cookie";
+import { dateToString } from "../../../utils/dates";
+
 
 interface InteractiveMapProps {
   plots: IPlot[];
@@ -30,10 +31,9 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   // // initialise mapId
   const mapId: string =
     darkMode == "true" ? "c1b071c4df766122" : "22722d672fb630c2";
-  
-  const plotColour: string = 
-    darkMode == "true" ? "#428BCA" : "#f0f26b";
+  const plotColour: string = darkMode == "true" ? "#428BCA" : "#F0F26B";
 
+  // Memorise map instance
   useEffect(() => {
     if (mapRef.current) {
       setMap(
@@ -57,14 +57,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
     }
   }, [mapRef, mapId]);
 
-  // Memorise map instance
-  // dark mapId: "22722d672fb630c2"
-  //let mapId = "c1b071c4df766122";
-  //if (global.darkMode) {
-  //mapId = "22722d672fb630c2";
-  //}
   // Initialise overlay
-
   useEffect(() => {
     if (map) {
       new google.maps.GroundOverlay(
@@ -93,24 +86,150 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
         fillColor: plotColour,
         fillOpacity: 0.2,
       });
-
       polygon.setMap(map ?? null);
-
-      const infowindow = new google.maps.InfoWindow({
-        content: 
-        "<h2>"+ plot.registeredName + " Plot #" + plot.plotNumber +"</h2>"
-        + "<b>" + "<p>Number of People: " + plot.buried.length + "</p>" + "</b>" +
-        plot.buried.map((person : IPerson) => (
-        "<p></p>" +person.fullName 
-        ))
-      });
 
       const point = averageCoordinates(plot.coordinates);
 
+      const infowindow1 = new google.maps.InfoWindow({
+        zIndex: 2,
+        maxWidth: 250,
+      });
+      const infowindow = new google.maps.InfoWindow({
+        zIndex: 1,
+      });
+
+      const personId = plot.buried.map((person: IPerson) => person._id);
+      const personNames = plot.buried.map((person: IPerson) => person.fullName);
+      const personDateOfBirths = plot.buried.map((person: IPerson) =>
+        "<p></p>" + person.dateOfBirth
+          ? dateToString(person.dateOfBirth)
+          : "Unknown"
+      );
+      const personDateOfDeaths = plot.buried.map((person: IPerson) =>
+        "<p></p>" + person.dateOfDeath
+          ? dateToString(person.dateOfDeath)
+          : "Unknown"
+      );
+
       polygon.addListener("mouseover", () => {
+        infowindow.setContent(
+          "<h2>" +
+            plot.registeredName +
+            " Plot #" +
+            plot.plotNumber +
+            "</h2>" +
+            "<b>" +
+            "<p>Number of People: " +
+            plot.buried.length +
+            "</p>" +
+            "</b>" +
+            "<div id='button'></div>" +
+            "<br></br>"
+        );
         infowindow.setPosition(point);
         infowindow.open(map);
       });
+
+      google.maps.event.addListener(infowindow, "domready", () => {
+        const parentbtn = document.getElementById("button");
+        for (let i = 0; i < personNames.length; i++) {
+          const btn = document.createElement("button");
+          btn.id = String(i);
+          btn.innerHTML = personNames[i] + "&#8505";
+          if (parentbtn !== null) {
+            parentbtn.appendChild(btn);
+          }
+        }
+
+        parentbtn?.addEventListener("click", (e) => {
+          if (e.target !== null) {
+            const btn = e.target as Element;
+            const btnNumber = Number(btn.id);
+            const profileLink: string = "'profile/" + personId[btnNumber] + "'";
+            const aLink: string = "<a href=" + profileLink + ">";
+
+            const fetchPromise = fetch(`/api/person/${personId[btnNumber]}`);
+
+            fetchPromise.then((response) => {
+              const jsonPromise = response.json();
+              jsonPromise.then((data) => {
+                if (data.images[0] !== undefined) {
+                  const imageUrl = data.images[0].url
+                const personImageUrl: string = 
+                "<img src=" + imageUrl + " width='200' height='100'}>";
+                infowindow1.setContent(
+                  "<p></p>" +
+                    "<h2>" +
+                    "<b>" +
+                    aLink +
+                    personNames[btnNumber] +
+                    "</a></b></h2>" +
+                    "<p></p>" +
+                    aLink + 
+                    personImageUrl +
+                    "</img>" +
+                    "</a>" +
+                    "<p></p>" +
+                    "Plot: " +
+                    plot.registeredName +
+                    " #" +
+                    plot.plotNumber +
+                    "<p></p>" +
+                    "Date of birth: " +
+                    personDateOfBirths[btnNumber] +
+                    "<p></p>" +
+                    "Date of death: " +
+                    personDateOfDeaths[btnNumber] +
+                    "<p></p>" +
+                    "<button id='back'>&#8592</button>"
+                );
+                } else {
+                const personImageUrl = 
+                "<img src='images/default-dp.png' width='200' height='200'}>";
+                infowindow1.setContent(
+                  "<p></p>" +
+                    "<h2>" +
+                    "<b>" +
+                    aLink +
+                    personNames[btnNumber] +
+                    "</a></b></h2>" +
+                    "<p></p>" +
+                    aLink + 
+                    personImageUrl +
+                    "</img>" +
+                    "</a>" +
+                    "<p></p>" +
+                    "Plot: " +
+                    plot.registeredName +
+                    " #" +
+                    plot.plotNumber +
+                    "<p></p>" +
+                    "Date of birth: " +
+                    personDateOfBirths[btnNumber] +
+                    "<p></p>" +
+                    "Date of death: " +
+                    personDateOfDeaths[btnNumber] +
+                    "<p></p>" +
+                    "<button id='back'>&#8592</button>"
+                );
+                }
+                
+              });
+            });
+
+            infowindow1.setPosition(point);
+            infowindow1.open(map);
+          }
+        });
+      });
+
+      google.maps.event.addListener(infowindow1, "domready", () => {
+        const back = document.getElementById("back");
+        back?.addEventListener("click", () => {
+          infowindow1.close();
+        });
+      });
+
       polygon.addListener("mouseout", () => {
         infowindow.close();
       });
@@ -122,6 +241,21 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
     return () => polygons.forEach((polygon) => polygon.setMap(null));
   }, [map, plots, plotColour]);
+
+  // Highlight anniversary graveyard plots
+  useEffect(() => {
+    const matchedPlots = getAnniversaryPlots(plots);
+    // console.log(matchedPlots)
+    if (matchedPlots) {
+      matchedPlots.forEach((plot) => {
+        // console.log(plot)
+        if (plot) {
+          const selectedPolygon = polygonsByNumber?.get(plot.plotNumber);
+          selectedPolygon?.setOptions({ fillColor: "#7A49FF" });
+        }
+      });
+    }
+  }, [plots, polygonsByNumber]);
 
   // Initialise click listeners
   useEffect(() => {
