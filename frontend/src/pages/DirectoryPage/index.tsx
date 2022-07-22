@@ -33,7 +33,7 @@ const DirectoryPage: React.FC = () => {
 
   useEffect(() => {
     people &&
-      setAnniversaryPeople(filterWithinWeek(people, new Date(2022, 6, 12)));
+      setAnniversaryPeople(filterWithinWeek(people, new Date()));
   }, [people]);
 
   const handleClick = (id: string): void => {
