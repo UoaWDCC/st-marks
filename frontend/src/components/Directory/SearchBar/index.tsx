@@ -63,8 +63,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     setOpen(false);
   };
 
-  console.log(date);
-
   return (
     <Paper className={styles.container}>
       <div className={styles.searchBar}>
@@ -111,10 +109,10 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                           setDate(newDateValue);
                           newDateValue
                             ? onDeathDateChange({
-                                year: getYear(newDateValue),
-                                month: getMonth(newDateValue) + 1,
-                                day: getDate(newDateValue),
-                              })
+                              year: getYear(newDateValue),
+                              month: getMonth(newDateValue) + 1,
+                              day: getDate(newDateValue),
+                            })
                             : onDeathDateChange({});
                         }}
                         renderInput={(params) => {
@@ -167,10 +165,10 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
                 setDate(newDateValue);
                 newDateValue
                   ? onDeathDateChange({
-                      year: getYear(newDateValue),
-                      month: getMonth(newDateValue) + 1,
-                      day: getDate(newDateValue),
-                    })
+                    year: getYear(newDateValue),
+                    month: getMonth(newDateValue) + 1,
+                    day: getDate(newDateValue),
+                  })
                   : onDeathDateChange({});
               }}
               renderInput={(params) => <TextField {...params} />}
